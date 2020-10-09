@@ -2,7 +2,7 @@ package me.oczi.api.node.block;
 
 import me.oczi.api.LiquidType;
 import me.oczi.api.node.AbstractNode;
-import me.oczi.api.node.goal.BlockPointNode;
+import me.oczi.api.node.point.BlockPointNode;
 import me.oczi.util.BukkitParser;
 import org.bukkit.Location;
 import org.bukkit.Material;

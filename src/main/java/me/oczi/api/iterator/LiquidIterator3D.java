@@ -5,9 +5,9 @@ import me.oczi.api.collections.CheckedSet;
 import me.oczi.api.node.block.ALiquidNode;
 import me.oczi.api.node.block.LiquidNode;
 import me.oczi.api.node.checkpoint.CheckpointANode;
-import me.oczi.api.node.goal.LiquidPointNode;
+import me.oczi.api.node.point.LiquidPointNode;
 import me.oczi.util.Commons;
-import me.oczi.util.CommonsBukkit;
+import me.oczi.util.CommonsNode;
 import me.oczi.util.LiquidFace;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -31,7 +31,7 @@ public class LiquidIterator3D extends AbstractLiquidIterator {
         // they cannot connect on a different level,
         // that violates the law of physics.
         // FIXME: Delete this after implement LiquidIterator2D
-        if (CommonsBukkit.isSameYLevel(
+        if (CommonsNode.isSameYLevel(
             currentNode, point.getGoal())) {
             this.persistenceFace = LiquidFace.UP;
         }
@@ -42,13 +42,15 @@ public class LiquidIterator3D extends AbstractLiquidIterator {
         return this.state == TaskState.UNDEFINED;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public LiquidNode next() {
         if (this.state == TaskState.SUCCESSFULLY) {
             return this.currentNode;
         }
 
-        if (this.tries == this.max) {
+        if (this.tries == this.max ||
+            this.currentNode == null) {
             this.state = TaskState.FAILED;
         } else {
             this.tries++;
@@ -58,7 +60,7 @@ public class LiquidIterator3D extends AbstractLiquidIterator {
             return null;
         }
         checkedSet.addToBlackSet(this.currentNode);
-        Set<ALiquidNode> blocks = CommonsBukkit
+        Set<ALiquidNode> blocks = CommonsNode
             .getAdjacentLiquidNodes(
                 this.currentNode,
                 this.point,
@@ -89,7 +91,7 @@ public class LiquidIterator3D extends AbstractLiquidIterator {
             return null;
         } else if (nodes.size() < 2) {
             ALiquidNode next = nodes.iterator().next();
-            if (CommonsBukkit.isCoordsEquals(next, point.getGoal())) {
+            if (CommonsNode.isCoordsEquals(next, point.getGoal())) {
                 this.state = TaskState.SUCCESSFULLY;
             }
             return next;
@@ -97,7 +99,7 @@ public class LiquidIterator3D extends AbstractLiquidIterator {
             this.latestCheckpoint =
                 CheckpointANode.newCheckpoint(currentNode, nodes);
             for (ALiquidNode node : latestCheckpoint.getNodes()) {
-                if (CommonsBukkit.isCoordsEquals(node, point.getGoal())) {
+                if (CommonsNode.isCoordsEquals(node, point.getGoal())) {
                     this.state = TaskState.SUCCESSFULLY;
                     return node;
                 }

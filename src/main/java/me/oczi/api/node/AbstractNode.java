@@ -1,9 +1,12 @@
 package me.oczi.api.node;
 
-import me.oczi.util.CommonsBukkit;
+import me.oczi.util.CommonsNode;
 
 import java.util.Objects;
 
+/**
+ * Class Abstraction of {@link Node}.
+ */
 public abstract class AbstractNode
     implements Node {
     protected final int x;
@@ -20,7 +23,7 @@ public abstract class AbstractNode
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Node)) return false;
-        return CommonsBukkit
+        return CommonsNode
             .isCoordsEquals(this, (Node) o);
     }
 

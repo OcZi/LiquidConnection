@@ -4,35 +4,35 @@ import java.util.Set;
 
 public class CheckedSetImpl<T>
     implements CheckedSet<T> {
-    private final Set<T> whiteList;
-    private final Set<T> blackList;
+    private final Set<T> whiteSet;
+    private final Set<T> blackSet;
 
-    public CheckedSetImpl(Set<T> whiteList,
-                          Set<T> blackList) {
-        this.whiteList = whiteList;
-        this.blackList = blackList;
+    public CheckedSetImpl(Set<T> whiteSet,
+                          Set<T> blackSet) {
+        this.whiteSet = whiteSet;
+        this.blackSet = blackSet;
     }
 
     @Override
     public void addToBlackSet(T object) {
-        whiteList.remove(object);
-        blackList.add(object);
+        whiteSet.remove(object);
+        blackSet.add(object);
     }
 
     @Override
     public void addToWhiteSet(T object) {
-        blackList.remove(object);
-        whiteList.add(object);
+        blackSet.remove(object);
+        whiteSet.add(object);
     }
 
     @Override
     public boolean isBlackSetted(T object) {
-        return blackList.contains(object);
+        return blackSet.contains(object);
     }
 
     @Override
     public boolean isWhiteSetted(T object) {
-        return whiteList.contains(object);
+        return whiteSet.contains(object);
     }
 
     @Override
@@ -47,11 +47,11 @@ public class CheckedSetImpl<T>
 
     @Override
     public Set<T> getBlackSet() {
-        return blackList;
+        return blackSet;
     }
 
     @Override
     public Set<T> getWhiteSet() {
-        return whiteList;
+        return whiteSet;
     }
 }

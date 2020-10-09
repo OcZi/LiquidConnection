@@ -1,7 +1,7 @@
 package me.oczi.api.node.checkpoint;
 
 import me.oczi.api.node.Node;
-import me.oczi.api.node.goal.PointNode;
+import me.oczi.api.node.point.PointNode;
 
 public class EmptyPointNode<T extends Node> implements PointNode<T> {
 

@@ -3,9 +3,11 @@ package me.oczi.api.region;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
-import java.util.List;
 import java.util.Set;
 
+/**
+ * A region representation.
+ */
 public interface Region {
 
     boolean containsBlock(Block block);

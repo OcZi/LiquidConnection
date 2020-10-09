@@ -3,7 +3,7 @@ package me.oczi.api.node.block;
 import me.oczi.api.LiquidType;
 import me.oczi.api.Nodes;
 import me.oczi.api.node.ANode;
-import me.oczi.api.node.goal.PointNode;
+import me.oczi.api.node.point.PointNode;
 import me.oczi.util.BukkitParser;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -16,11 +16,15 @@ class ALiquidNodeImpl extends LiquidNodeImpl
     private final int f;
 
     public ALiquidNodeImpl(LiquidNode node, PointNode<LiquidNode> point) {
-        this(node.getBlock(), point);
+        this(node.getLiquidType(), node.getBlock(), point);
     }
 
     public ALiquidNodeImpl(Block block, PointNode<LiquidNode> point) {
-        this(BukkitParser.asLiquid(block), block, point);
+        this(BukkitParser
+            .checkedAsLiquid(block,
+                "Invalid liquid type for block (not is a liquid?)"),
+            block,
+            point);
     }
 
     public ALiquidNodeImpl(LiquidType type, Block block, PointNode<LiquidNode> point) {

@@ -3,6 +3,9 @@ package me.oczi.util;
 import me.oczi.api.node.Node;
 import me.oczi.exceptions.UnreachableGoal;
 
+/**
+ * Preconditions for Liquids.
+ */
 public interface LiquidPreconditions {
 
     static void checkLevel(Node node1, Node node2) {

@@ -3,6 +3,10 @@ package me.oczi.api.location;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+/**
+ * A location of region.
+ * Used to iterate blocks of region.
+ */
 public class RegionLocation {
     private final World world;
 

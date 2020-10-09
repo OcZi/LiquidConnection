@@ -7,6 +7,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
+/**
+ * Face representation of liquids.
+ */
 public enum LiquidFace {
     NORTH(BlockFace.NORTH),
     EAST(BlockFace.EAST),
@@ -92,7 +95,7 @@ public enum LiquidFace {
     }
 
     public boolean isAdjacent(BlockNode node, Node nodeEquals) {
-        return CommonsBukkit.isCoordsEquals(
+        return CommonsNode.isCoordsEquals(
             node.getBlock().getRelative(blockFace),
             nodeEquals);
     }

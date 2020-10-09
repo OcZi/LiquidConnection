@@ -4,6 +4,9 @@ import com.google.common.util.concurrent.FutureCallback;
 
 import java.util.function.Consumer;
 
+/**
+ * Guava's future utils.
+ */
 public interface GFutures {
 
     static <T> FutureCallbackBuilder<T> newBuilder() {

@@ -1,23 +1,13 @@
 package me.oczi.util;
 
 import me.oczi.api.LiquidType;
-import me.oczi.api.node.block.LiquidNode;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static me.oczi.api.LiquidType.*;
 
 public interface BukkitParser {
-
-    static Location asLocation(World world, LiquidNode node) {
-        return new Location(world,
-            node.getX(),
-            node.getY(),
-            node.getZ());
-    }
 
     static LiquidType asLiquid(Block block) {
         return asLiquid(block.getType());

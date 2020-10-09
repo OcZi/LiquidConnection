@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A list master that controls two
- * lists called WhiteSet and BlackSet.
+ * A Set master that controls two
+ * Sets called WhiteSet and BlackSet.
  *
  * <p>Used to maintain order between
  * the objects available and unavailable.</p>

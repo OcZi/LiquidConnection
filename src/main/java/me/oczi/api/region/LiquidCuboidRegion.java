@@ -3,6 +3,7 @@ package me.oczi.api.region;
 import me.oczi.api.LiquidType;
 import me.oczi.api.node.block.LiquidNode;
 import me.oczi.util.CommonsBukkit;
+import me.oczi.util.CommonsNode;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
@@ -63,7 +64,7 @@ public class LiquidCuboidRegion implements Region {
 
     @Override
     public Set<Block> getBlocksBetweenLevel(int minY, int maxY) {
-        return CommonsBukkit.filterLevelNode(blocks, minY, maxY);
+        return CommonsNode.filterLevelNode(blocks, minY, maxY);
     }
 
     @Override

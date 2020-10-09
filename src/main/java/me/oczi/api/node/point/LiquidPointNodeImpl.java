@@ -1,4 +1,4 @@
-package me.oczi.api.node.goal;
+package me.oczi.api.node.point;
 
 import me.oczi.api.LiquidType;
 import me.oczi.api.node.block.LiquidNode;
@@ -49,13 +49,23 @@ class LiquidPointNodeImpl<T extends LiquidNode>
     }
 
     @Override
-    public Material getType() {
+    public Material getStartType() {
         return start.getType();
     }
 
     @Override
-    public Block getBlock() {
+    public Block getStartBlock() {
         return start.getBlock();
+    }
+
+    @Override
+    public Material getGoalType() {
+        return goal.getType();
+    }
+
+    @Override
+    public Block getGoalBlock() {
+        return goal.getBlock();
     }
 
     @Override

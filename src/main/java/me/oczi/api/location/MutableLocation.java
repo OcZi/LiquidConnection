@@ -3,6 +3,9 @@ package me.oczi.api.location;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+/**
+ * A mutable {@link Location} for any of their properties.
+ */
 public interface MutableLocation {
 
     static MutableLocation  mutateLocation(Location location) {

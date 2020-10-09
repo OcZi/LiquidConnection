@@ -1,15 +1,14 @@
-package me.oczi;
+package me.oczi.api;
 
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-import me.oczi.api.LiquidType;
-import me.oczi.api.TaskState;
+import com.google.common.util.concurrent.ListeningExecutorService;
 import me.oczi.api.collections.CheckedSet;
 import me.oczi.api.iterator.LiquidIterator;
 import me.oczi.api.iterator.LiquidIterator3D;
 import me.oczi.api.node.block.ALiquidNode;
 import me.oczi.api.node.block.LiquidNode;
-import me.oczi.api.node.goal.LiquidPointNode;
+import me.oczi.api.node.point.LiquidPointNode;
 import me.oczi.api.region.Region;
 import me.oczi.util.BukkitParser;
 import me.oczi.util.guava.GFutures;
@@ -22,7 +21,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class LiquidConnector implements Iterable<LiquidNode> {
+import static com.google.common.base.Preconditions.checkNotNull;
+
+/**
+ * Class that's apply pathfinding to found
+ * if two blocks of the same liquid is connected.
+ */
+public class LiquidConnectorImpl implements LiquidConnector {
+    private final ListeningExecutorService service;
     private final LiquidPointNode<LiquidNode> liquidPointNode;
 
     private final LiquidIterator iterator;
@@ -30,17 +36,33 @@ public class LiquidConnector implements Iterable<LiquidNode> {
 
     private LiquidNode result;
 
-    public LiquidConnector(Block start,
-                           Block goal,
-                           Region region,
-                           @Nullable BlockFace face) {
-        this(start, goal, region.getBlocks(), face);
+    LiquidConnectorImpl(Block start,
+                               Block goal,
+                               Region region,
+                               @Nullable BlockFace face) {
+        this(start, goal, region.getBlocks(), face, null);
     }
 
-    public LiquidConnector(Block start,
-                           Block goal,
-                           Set<Block> blocks,
-                           @Nullable BlockFace face) {
+    LiquidConnectorImpl(Block start,
+                               Block goal,
+                               Region region,
+                               @Nullable BlockFace face,
+                               @Nullable ListeningExecutorService service) {
+        this(start, goal, region.getBlocks(), face, service);
+    }
+
+    LiquidConnectorImpl(Block start,
+                               Block goal,
+                               Set<Block> blocks,
+                               @Nullable BlockFace face) {
+        this(start, goal, blocks, face, null);
+    }
+
+    LiquidConnectorImpl(Block start,
+                               Block goal,
+                               Set<Block> blocks,
+                               @Nullable BlockFace face,
+                               @Nullable ListeningExecutorService service) {
         LiquidType startType = BukkitParser
             .checkedAsLiquid(start,
                 "The start block is not a liquid.");
@@ -52,12 +74,15 @@ public class LiquidConnector implements Iterable<LiquidNode> {
             LiquidNode.newNode(goalType, goal));
         this.blocks = blocks;
         this.iterator = createIterator(face);
+        this.service = service;
     }
 
+    @Override
     public LiquidNode run() {
         return run(null);
     }
 
+    @Override
     public LiquidNode run(@Nullable Consumer<LiquidNode> consumer) {
         while (iterator.hasNext()) {
             this.result = iterator.next();
@@ -68,39 +93,43 @@ public class LiquidConnector implements Iterable<LiquidNode> {
         return this.result;
     }
 
-    public void run(@Nullable Consumer<LiquidNode> success,
+    @Override
+    public void run(@Nullable Consumer<LiquidNode> after,
                     @Nullable Consumer<Throwable> failure) {
-        run(null, success, failure);
+        run(null, after, failure);
     }
 
+    @Override
     public void run(@Nullable Consumer<LiquidNode> consumer,
-                    @Nullable Consumer<LiquidNode> success,
+                    @Nullable Consumer<LiquidNode> after,
                     @Nullable Consumer<Throwable> failure) {
         try {
             run(consumer);
-            if (getState() == TaskState.SUCCESSFULLY) {
-                if (success == null) return;
-                success.accept(getResult());
-            }
+            if (after == null) return;
+            after.accept(getResult());
         } catch (Throwable t) {
             if (failure == null) return;
             failure.accept(t);
         }
     }
 
-    public void runAsync(Consumer<LiquidNode> success,
+    @Override
+    public void runAsync(Consumer<LiquidNode> after,
                          Consumer<Throwable> failure) {
-        runAsync(null, success, failure);
+        runAsync(null, after, failure);
     }
 
+    @Override
     public void runAsync(@Nullable Consumer<LiquidNode> runnable,
-                         Consumer<LiquidNode> success,
+                         Consumer<LiquidNode> after,
                          Consumer<Throwable> failure) {
+        checkNotNull(service,
+            "ExecutorService of LiquidConnector is null.");
         ListenableFuture<LiquidNode> submit =
-            AsyncThread.submit(() -> run(runnable));
+            service.submit(() -> run(runnable));
         Futures.addCallback(submit,
             GFutures.newFutureCallback(
-                success, failure));
+                after, failure));
     }
 
     private LiquidIterator createIterator(BlockFace face) {
@@ -116,6 +145,7 @@ public class LiquidConnector implements Iterable<LiquidNode> {
             face);
     }
 
+    @Override
     public LiquidNode getResult() {
         return result;
     }
@@ -126,6 +156,7 @@ public class LiquidConnector implements Iterable<LiquidNode> {
         return iterator;
     }
 
+    @Override
     public TaskState getState() {
         return iterator.getState();
     }

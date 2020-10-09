@@ -1,9 +1,13 @@
-package me.oczi.api.node.goal;
+package me.oczi.api.node.point;
 
 import me.oczi.api.node.Node;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * Class abstraction of {@link PointNode}.
+ * @param <T> Type.
+ */
 public abstract class AbstractPointNode<T extends Node>
     implements PointNode<T> {
     protected final T start;

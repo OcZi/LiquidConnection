@@ -1,10 +1,10 @@
 package me.oczi.api.iterator;
 
-import me.oczi.api.collections.CheckedSet;
 import me.oczi.api.TaskState;
+import me.oczi.api.collections.CheckedSet;
 import me.oczi.api.node.block.ALiquidNode;
 import me.oczi.api.node.block.LiquidNode;
-import me.oczi.api.node.goal.LiquidPointNode;
+import me.oczi.api.node.point.LiquidPointNode;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.Nullable;
 

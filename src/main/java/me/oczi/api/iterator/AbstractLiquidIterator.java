@@ -6,14 +6,17 @@ import me.oczi.api.collections.CheckedSet;
 import me.oczi.api.node.block.ALiquidNode;
 import me.oczi.api.node.block.LiquidNode;
 import me.oczi.api.node.checkpoint.CheckpointANode;
-import me.oczi.api.node.goal.LiquidPointNode;
-import me.oczi.util.CommonsBukkit;
+import me.oczi.api.node.point.LiquidPointNode;
+import me.oczi.util.CommonsNode;
 import me.oczi.util.LiquidFace;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Queue;
 
+/**
+ * Class abstraction of {@link LiquidIterator}.
+ */
 public abstract class AbstractLiquidIterator implements LiquidIterator {
     protected final LiquidPointNode<LiquidNode> point;
 
@@ -41,8 +44,8 @@ public abstract class AbstractLiquidIterator implements LiquidIterator {
         this.ignoreFace = LiquidFace.toLiquidFace(ignoreFace);
 
         LiquidNode goal = point.getGoal();
-        if (CommonsBukkit.isCoordsEquals(currentNode, goal) ||
-            CommonsBukkit.isAdjacent(currentNode, goal, ignoreFace)) {
+        if (CommonsNode.isCoordsEquals(currentNode, goal) ||
+            CommonsNode.isAdjacent(currentNode, goal, ignoreFace)) {
             this.max = 0;
             this.state = TaskState.SUCCESSFULLY;
             return;
