@@ -115,6 +115,11 @@ public class LiquidIterator3D extends AbstractLiquidIterator {
             faces.add(ignoreFace);
             ignoreFace = null;
         }
+        // Strange conditional...
+        if (persistenceFace == null &&
+            CommonsNode.isSameYLevel(currentNode, point.getGoal())) {
+            persistenceFace = LiquidFace.UP;
+        }
         if (persistenceFace != null) {
             faces.add(persistenceFace);
         }
