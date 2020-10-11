@@ -6,7 +6,12 @@
 
     <groupId>me.oczi</groupId>
     <artifactId>LiquidConnector</artifactId>
+    <packaging>pom</packaging>
     <version>0.5-SNAPSHOT</version>
+
+    <modules>
+        <module>Core</module>
+    </modules>
 
     <repositories>
         <repository>

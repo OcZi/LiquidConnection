@@ -72,7 +72,7 @@ public class LiquidIterator3D extends AbstractLiquidIterator {
                     this.state = TaskState.FAILED;
                     return null;
                 }
-                this.latestCheckpoint = checkpoints.poll();;
+                this.latestCheckpoint = checkpoints.poll();
             }
             this.currentNode = this.latestCheckpoint.getNearestNode();
         } else {
