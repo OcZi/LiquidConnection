@@ -13,6 +13,6 @@
     <version>0.5-SNAPSHOT</version>
 
     <build>
-        <finalName>${project.parent.artifactId}-${project.artifactId}-${project.parent.version}</finalName>
+        <finalName>${project.artifactId}-${project.parent.version}</finalName>
     </build>
 </project>
