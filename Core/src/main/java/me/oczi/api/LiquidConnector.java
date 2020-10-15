@@ -1,6 +1,8 @@
 package me.oczi.api;
 
+import me.oczi.api.iterator.LiquidIterator;
 import me.oczi.api.node.block.LiquidNode;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -66,4 +68,6 @@ public interface LiquidConnector extends Iterable<LiquidNode> {
      * @return State of pathfinding.
      */
     TaskState getState();
+
+    @NotNull LiquidIterator iterator();
 }
