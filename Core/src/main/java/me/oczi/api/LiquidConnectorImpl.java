@@ -104,9 +104,8 @@ public class LiquidConnectorImpl implements LiquidConnector {
                     @Nullable Consumer<LiquidNode> after,
                     @Nullable Consumer<Throwable> failure) {
         try {
-            run(consumer);
-            if (after == null) return;
-            after.accept(getResult());
+            if (consumer != null) run(consumer);
+            if (after != null) after.accept(getResult());
         } catch (Throwable t) {
             if (failure == null) return;
             failure.accept(t);
