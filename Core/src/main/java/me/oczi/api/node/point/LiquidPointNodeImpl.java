@@ -39,7 +39,7 @@ class LiquidPointNodeImpl<T extends LiquidNode>
 
     private int calculateDistance(T node1, T node2) {
         Location location = node1.getBlockLocation();
-        return (int) location.distanceSquared(
+        return (int) location.distance(
             node2.getBlockLocation());
     }
 
