@@ -44,6 +44,11 @@ public class LiquidNodeImpl
     }
 
     @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
     public Material getType() {
         return block.getType();
     }

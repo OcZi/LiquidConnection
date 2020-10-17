@@ -68,14 +68,19 @@ class ALiquidNodeImpl extends LiquidNodeImpl
     @Override
     public int compareTo(ANode node) {
         return Integer
-            .compare(getF(), node.getF());
+            .compare(f, node.getF());
     }
 
 
     @Override
     public String toString() {
-        return "LiquidNode{{" + super.toString() + "}, h=" + h +
+        return "ALiquidNodeImpl{" +
+            "h=" + h +
             ", g=" + g +
+            ", f=" + f +
+            ", x=" + x +
+            ", y=" + y +
+            ", z=" + z +
             '}';
     }
 }

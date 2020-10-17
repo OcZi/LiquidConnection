@@ -133,9 +133,7 @@ public class LiquidConnectionImpl implements LiquidConnection {
     private LiquidIterator createIterator(BlockFace face) {
         CheckedSet<LiquidNode> checkedSet =
             CheckedSet.newCheckedSet(
-                LiquidNode
-                    .toSetNodes(
-                        blocks, liquidPointNode),
+                LiquidNode.toSetNodes(blocks),
                 new HashSet<>());
         return new LiquidIterator3D(
             liquidPointNode,

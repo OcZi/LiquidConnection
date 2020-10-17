@@ -2,12 +2,14 @@ package me.oczi.api.node.block;
 
 import me.oczi.api.LiquidType;
 import me.oczi.api.node.point.BlockPointNode;
+import me.oczi.util.BukkitParser;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A {@link BlockNode} implementation for liquid blocks.
@@ -74,14 +76,17 @@ public interface LiquidNode
     }
 
     /**
-     * Convert all the blocks to LiquidNodes.
-     * @param blocks blocks to nodes.
-     * @return List of LiquidNodes.
+     * Convert all the blocks into LiquidNodes.
+     * @param blocks Blocks to LiquidNodes.
+     * @return Set of liquidNodes.
      */
-    static List<LiquidNode> toListNodes(List<Block> blocks) {
-        List<LiquidNode> nodes = new ArrayList<>();
+    static Set<LiquidNode> toSetNodes(Set<Block> blocks) {
+        Set<LiquidNode> nodes = new HashSet<>();
         for (Block block : blocks) {
-            nodes.add(asNode(block));
+            nodes.add(
+                newNode(
+                    BukkitParser.checkedAsLiquid(block, "A block is not a liquid."),
+                    block));
         }
         return nodes;
     }
