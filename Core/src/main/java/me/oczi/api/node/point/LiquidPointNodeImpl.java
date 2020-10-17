@@ -2,7 +2,7 @@ package me.oczi.api.node.point;
 
 import me.oczi.api.LiquidType;
 import me.oczi.api.node.block.LiquidNode;
-import org.bukkit.Location;
+import me.oczi.util.Maths;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
@@ -21,7 +21,7 @@ class LiquidPointNodeImpl<T extends LiquidNode>
             "Block type of points is not liquid.");
         checkArgument(start.getLiquidType() == goal.getLiquidType(),
             "Start and goal have different type of liquid.");
-        this.liquidType = start.getLiquidType();;
+        this.liquidType = start.getLiquidType();
     }
 
     @Override
@@ -38,9 +38,8 @@ class LiquidPointNodeImpl<T extends LiquidNode>
     }
 
     private int calculateDistance(T node1, T node2) {
-        Location location = node1.getBlockLocation();
-        return (int) location.distance(
-            node2.getBlockLocation());
+        // Will always distance 3D... for now.
+        return Maths.manhattanDistance3D(node1, node2);
     }
 
     @Override
