@@ -32,10 +32,10 @@ public abstract class AbstractLiquidIterator implements LiquidIterator {
         EvictingQueue.create(5);
     protected CheckpointANode<ALiquidNode> latestCheckpoint;
 
-    protected final CheckedSet<ALiquidNode> checkedSet;
+    protected final CheckedSet<LiquidNode> checkedSet;
 
     public AbstractLiquidIterator(LiquidPointNode<LiquidNode> point,
-                                  CheckedSet<ALiquidNode> checkedSet,
+                                  CheckedSet<LiquidNode> checkedSet,
                                   @Nullable BlockFace ignoreFace) {
         this.point = point;
         this.currentNode = ALiquidNode
@@ -57,7 +57,9 @@ public abstract class AbstractLiquidIterator implements LiquidIterator {
     }
 
     @Override
-    public abstract boolean hasNext();
+    public boolean hasNext() {
+        return this.state == TaskState.UNDEFINED;
+    }
 
     @Override
     public abstract LiquidNode next();
@@ -68,7 +70,7 @@ public abstract class AbstractLiquidIterator implements LiquidIterator {
     }
 
     @Override
-    public CheckedSet<ALiquidNode> getCheckedSet() {
+    public CheckedSet<LiquidNode> getCheckedSet() {
         return checkedSet;
     }
 }

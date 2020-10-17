@@ -23,7 +23,7 @@ public class LiquidIterator3D extends AbstractLiquidIterator {
     private LiquidFace persistenceFace;
 
     public LiquidIterator3D(LiquidPointNode<LiquidNode> point,
-                            CheckedSet<ALiquidNode> checkedSet,
+                            CheckedSet<LiquidNode> checkedSet,
                             @Nullable BlockFace ignoreFace) {
         super(point, checkedSet, ignoreFace);
         // If start node and goal node are on the same level (Y) of blocks
@@ -37,11 +37,8 @@ public class LiquidIterator3D extends AbstractLiquidIterator {
         }
     }
 
-    @Override
-    public boolean hasNext() {
-        return this.state == TaskState.UNDEFINED;
-    }
-
+    // Intellij doesn't check Commons#isNullOrEmpty
+    // and think the latestCheckpoint may be null.
     @SuppressWarnings("ConstantConditions")
     @Override
     public LiquidNode next() {
@@ -63,6 +60,7 @@ public class LiquidIterator3D extends AbstractLiquidIterator {
         Set<ALiquidNode> blocks = CommonsNode
             .getAdjacentLiquidNodes(
                 this.currentNode,
+                this.checkedSet,
                 this.point,
                 newIgnoreFaces());
         ALiquidNode nextNode = processNextNode(blocks);
@@ -115,7 +113,9 @@ public class LiquidIterator3D extends AbstractLiquidIterator {
             faces.add(ignoreFace);
             ignoreFace = null;
         }
-        // Strange conditional...
+        // If the currentNode level (Y) is at
+        // the same level as the goal,
+        // it is not necessary to go back up.
         if (persistenceFace == null &&
             CommonsNode.isSameYLevel(currentNode, point.getGoal())) {
             persistenceFace = LiquidFace.UP;

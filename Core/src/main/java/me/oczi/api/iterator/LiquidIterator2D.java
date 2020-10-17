@@ -2,7 +2,6 @@ package me.oczi.api.iterator;
 
 import me.oczi.api.TaskState;
 import me.oczi.api.collections.CheckedSet;
-import me.oczi.api.node.block.ALiquidNode;
 import me.oczi.api.node.block.LiquidNode;
 import me.oczi.api.node.point.LiquidPointNode;
 import org.bukkit.block.BlockFace;
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class LiquidIterator2D extends AbstractLiquidIterator {
 
     public LiquidIterator2D(LiquidPointNode<LiquidNode> point,
-                            CheckedSet<ALiquidNode> checkedSet,
+                            CheckedSet<LiquidNode> checkedSet,
                             @Nullable BlockFace ignoreFace) {
         super(point, checkedSet, ignoreFace);
     }
@@ -35,7 +34,7 @@ public class LiquidIterator2D extends AbstractLiquidIterator {
     }
 
     @Override
-    public CheckedSet<ALiquidNode> getCheckedSet() {
+    public CheckedSet<LiquidNode> getCheckedSet() {
         return null;
     }
 }
