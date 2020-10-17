@@ -17,18 +17,16 @@ class CheckPointANodeImpl<T extends ANode> implements CheckpointANode<T> {
 
     public CheckPointANodeImpl(T delegate, Collection<T> checkpoints) {
         this.delegate = delegate;
-        this.checkpoints = new PriorityQueue<>(
-            sortByHeuristic(checkpoints));
+        this.checkpoints = new PriorityQueue<>(checkpoints.size());
+        addAndSort(checkpoints instanceof List
+            ? (List<T>) checkpoints
+            : Lists.newArrayList(checkpoints));
     }
 
-    private List<T> sortByHeuristic(Collection<T> checkpoints) {
-        List<T> listCheckpoints =
-            !(checkpoints instanceof List)
-                ? Lists.newArrayList(checkpoints)
-                : (List<T>) checkpoints;
-        listCheckpoints.sort(Comparable::compareTo);
-        listCheckpoints.sort(Comparator.reverseOrder());
-        return listCheckpoints;
+    private void addAndSort(List<T> checkpoints) {
+        checkpoints.sort(Comparable::compareTo);
+        Collections.reverse(checkpoints);
+        this.checkpoints.addAll(checkpoints);
     }
 
     @Override
