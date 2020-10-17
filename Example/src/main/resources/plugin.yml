@@ -1,0 +1,4 @@
+name: LiquidConnectorExample
+main: me.oczi.ExampleMain
+api-version: "1.15"
+version: 1.0
