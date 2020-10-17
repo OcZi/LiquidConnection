@@ -2,12 +2,12 @@ package me.oczi.util;
 
 import com.google.common.collect.Sets;
 import me.oczi.api.LiquidType;
+import me.oczi.api.collections.CheckedSet;
 import me.oczi.api.node.Node;
 import me.oczi.api.node.block.ALiquidNode;
 import me.oczi.api.node.block.BlockNode;
 import me.oczi.api.node.block.LiquidNode;
 import me.oczi.api.node.point.BlockPointNode;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
@@ -15,13 +15,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
 public interface CommonsNode {
 
     static Set<ALiquidNode> getAdjacentLiquidNodes(@NotNull LiquidNode node,
+                                                   @NotNull CheckedSet<LiquidNode> checkedSet,
                                                    @NotNull BlockPointNode<LiquidNode> pointNode,
                                                    @Nullable Collection<LiquidFace> ignoredFace) {
         Set<ALiquidNode> nodes = new HashSet<>();
@@ -33,19 +33,16 @@ public interface CommonsNode {
             Block relative = block.getRelative(face.getBlockFace());
             LiquidType relativeType = BukkitParser
                 .uncheckedAsLiquid(relative);
-            if (relativeType != LiquidType.NONE &&
+            if (LiquidType.isValid(relativeType) &&
                 relativeType == node.getLiquidType()) {
-                nodes.add(ALiquidNode
-                    .asNode(relativeType, relative, pointNode));
+                LiquidNode liquidNode = LiquidNode
+                    .newNode(relativeType, relative);
+                if (checkedSet.isWhiteSetted(liquidNode)) {
+                    nodes.add(liquidNode.toAStarNode(pointNode));
+                }
             }
         }
         return nodes;
-    }
-
-    static void filterBlockNode(List<? extends BlockNode> blocks,
-                                Material material) {
-        blocks.removeIf(block ->
-            block.getBlock().getType() != material);
     }
 
     static Set<Block> filterLevelNode(Set<Block> blocks,
@@ -108,9 +105,5 @@ public interface CommonsNode {
 
     static boolean isSameYLevel(Node node1, Node node2) {
         return node1.getY() == node2.getY();
-    }
-
-    static void printCoords(Node node) {
-        System.out.println(getNodeCoordinates(node));
     }
 }
