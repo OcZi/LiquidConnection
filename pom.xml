@@ -7,7 +7,7 @@
     <groupId>me.oczi</groupId>
     <artifactId>LiquidConnection</artifactId>
     <packaging>pom</packaging>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.6-SNAPSHOT</version>
 
     <modules>
         <module>Example</module>
@@ -19,7 +19,26 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+        <repository>
+            <id>unnamed-snapshots</id>
+            <url>https://repo.unnamed.team/repository/unnamed-snapshots/</url>
+        </repository>
+        <repository>
+            <id>unnamed-releases</id>
+            <url>https://repo.unnamed.team/repository/unnamed-releases/</url>
+        </repository>
     </repositories>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>unnamed-snapshots</id>
+            <url>https://repo.unnamed.team/repository/unnamed-snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>unnamed-releases</id>
+            <url>https://repo.unnamed.team/repository/unnamed-releases/</url>
+        </repository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>

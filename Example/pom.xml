@@ -5,25 +5,19 @@
     <parent>
         <artifactId>LiquidConnection</artifactId>
         <groupId>me.oczi</groupId>
-        <version>0.5-SNAPSHOT</version>
+        <version>0.6-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>LiquidConnection-Example</artifactId>
     <version>1.0-SNAPSHOT</version>
-
-    <repositories>
-        <repository>
-            <id>unnamed-snapshots</id>
-            <url>https://repo.unnamed.team/repository/unnamed-snapshots/</url>
-        </repository>
-    </repositories>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>me.oczi</groupId>
             <artifactId>LiquidConnection-Core</artifactId>
-            <version>0.5-SNAPSHOT</version>
+            <version>0.6-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
