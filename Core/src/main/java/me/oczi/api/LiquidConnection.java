@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public interface LiquidConnector extends Iterable<LiquidNode> {
+public interface LiquidConnection extends Iterable<LiquidNode> {
 
     /**
      * Run Pathfinding.
@@ -32,11 +32,11 @@ public interface LiquidConnector extends Iterable<LiquidNode> {
 
     /**
      * Run Pathfinding.
-     * @param consumer Consumer executed every iteration of pathfinding.
+     * @param iterationConsumer Consumer executed every iteration of pathfinding.
      * @param after Consumer executed after pathfinding.
      * @param failure Consumer executed if pathfinding throws a exception.
      */
-    void run(@Nullable Consumer<LiquidNode> consumer,
+    void run(@Nullable Consumer<LiquidNode> iterationConsumer,
              @Nullable Consumer<LiquidNode> after,
              @Nullable Consumer<Throwable> failure);
 

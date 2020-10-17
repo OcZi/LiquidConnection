@@ -6,7 +6,6 @@ import com.google.common.util.concurrent.ListeningExecutorService;
 import me.oczi.api.collections.CheckedSet;
 import me.oczi.api.iterator.LiquidIterator;
 import me.oczi.api.iterator.LiquidIterator3D;
-import me.oczi.api.node.block.ALiquidNode;
 import me.oczi.api.node.block.LiquidNode;
 import me.oczi.api.node.point.LiquidPointNode;
 import me.oczi.api.region.Region;
@@ -27,7 +26,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Class that's apply pathfinding to found
  * if two blocks of the same liquid is connected.
  */
-public class LiquidConnectorImpl implements LiquidConnector {
+public class LiquidConnectionImpl implements LiquidConnection {
     private final ListeningExecutorService service;
     private final LiquidPointNode<LiquidNode> liquidPointNode;
 
@@ -36,33 +35,33 @@ public class LiquidConnectorImpl implements LiquidConnector {
 
     private LiquidNode result;
 
-    LiquidConnectorImpl(Block start,
-                               Block goal,
-                               Region region,
-                               @Nullable BlockFace face) {
+    LiquidConnectionImpl(Block start,
+                         Block goal,
+                         Region region,
+                         @Nullable BlockFace face) {
         this(start, goal, region.getBlocks(), face, null);
     }
 
-    LiquidConnectorImpl(Block start,
-                               Block goal,
-                               Region region,
-                               @Nullable BlockFace face,
-                               @Nullable ListeningExecutorService service) {
+    LiquidConnectionImpl(Block start,
+                         Block goal,
+                         Region region,
+                         @Nullable BlockFace face,
+                         @Nullable ListeningExecutorService service) {
         this(start, goal, region.getBlocks(), face, service);
     }
 
-    LiquidConnectorImpl(Block start,
-                               Block goal,
-                               Set<Block> blocks,
-                               @Nullable BlockFace face) {
+    LiquidConnectionImpl(Block start,
+                         Block goal,
+                         Set<Block> blocks,
+                         @Nullable BlockFace face) {
         this(start, goal, blocks, face, null);
     }
 
-    LiquidConnectorImpl(Block start,
-                               Block goal,
-                               Set<Block> blocks,
-                               @Nullable BlockFace face,
-                               @Nullable ListeningExecutorService service) {
+    LiquidConnectionImpl(Block start,
+                         Block goal,
+                         Set<Block> blocks,
+                         @Nullable BlockFace face,
+                         @Nullable ListeningExecutorService service) {
         LiquidType startType = BukkitParser
             .checkedAsLiquid(start,
                 "The start block is not a liquid.");
@@ -86,7 +85,8 @@ public class LiquidConnectorImpl implements LiquidConnector {
     public LiquidNode run(@Nullable Consumer<LiquidNode> consumer) {
         while (iterator.hasNext()) {
             this.result = iterator.next();
-            if (consumer != null) {
+            if (consumer != null &&
+                this.result != null) {
                 consumer.accept(this.result);
             }
         }
@@ -100,15 +100,14 @@ public class LiquidConnectorImpl implements LiquidConnector {
     }
 
     @Override
-    public void run(@Nullable Consumer<LiquidNode> consumer,
+    public void run(@Nullable Consumer<LiquidNode> iterationConsumer,
                     @Nullable Consumer<LiquidNode> after,
                     @Nullable Consumer<Throwable> failure) {
         try {
-            if (consumer != null) run(consumer);
+            run(iterationConsumer);
             if (after != null) after.accept(getResult());
         } catch (Throwable t) {
-            if (failure == null) return;
-            failure.accept(t);
+            if (failure != null) failure.accept(t);
         }
     }
 
@@ -132,9 +131,9 @@ public class LiquidConnectorImpl implements LiquidConnector {
     }
 
     private LiquidIterator createIterator(BlockFace face) {
-        CheckedSet<ALiquidNode> checkedSet =
+        CheckedSet<LiquidNode> checkedSet =
             CheckedSet.newCheckedSet(
-                ALiquidNode
+                LiquidNode
                     .toSetNodes(
                         blocks, liquidPointNode),
                 new HashSet<>());
