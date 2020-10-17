@@ -5,11 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.oczi</groupId>
-    <artifactId>LiquidConnector</artifactId>
+    <artifactId>LiquidConnection</artifactId>
     <packaging>pom</packaging>
     <version>0.5-SNAPSHOT</version>
 
     <modules>
+        <module>Example</module>
         <module>Core</module>
     </modules>
 
@@ -49,6 +50,19 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
