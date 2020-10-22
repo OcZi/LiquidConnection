@@ -2,6 +2,7 @@ package me.oczi;
 
 import me.fixeddev.commandflow.annotated.CommandClass;
 import me.fixeddev.commandflow.annotated.annotation.Command;
+import me.fixeddev.commandflow.annotated.annotation.Named;
 import me.fixeddev.commandflow.bukkit.annotation.Sender;
 import me.oczi.api.LiquidConnection;
 import me.oczi.api.Pathfinding;
@@ -30,7 +31,9 @@ import java.util.function.Consumer;
 public class ExampleCommand implements CommandClass {
 
   @Command(names = "connect")
-  public boolean connect(@Sender CommandSender sender, Block start, Block goal) {
+  public boolean connect(@Sender CommandSender sender,
+                         @Named("start-block") Block start,
+                         @Named("goal-block") Block goal) {
     if (!(sender instanceof Player)) {
       sender.sendMessage("Only players!");
       return false;
@@ -45,7 +48,9 @@ public class ExampleCommand implements CommandClass {
   }
 
   @Command(names = "see-path")
-  public boolean seePath(@Sender CommandSender sender, Block start, Block goal) {
+  public boolean seePath(@Sender CommandSender sender,
+                         @Named("start-block") Block start,
+                         @Named("goal-block") Block goal) {
     if (!(sender instanceof Player)) {
       sender.sendMessage("Only players!");
       return false;
@@ -63,7 +68,7 @@ public class ExampleCommand implements CommandClass {
 
             @Override
             public void run() {
-              b.setType(Material.WATER);
+              b.setType(Material.AIR);
             }
           }.runTaskLater(ExampleMain.getPlugin(), 50L);
         },
@@ -76,6 +81,11 @@ public class ExampleCommand implements CommandClass {
                                         Consumer<LiquidNode> consumer,
                                         Block start,
                                         Block goal) {
+    int distanceBetween = getDistanceBetween(start, goal);
+    if (distanceBetween == 100) {
+      sender.sendMessage("Distance too far!");
+      return null;
+    }
     Region cuboid = Regions
         .newCuboidWithRadius(start,
             getDistanceBetween(start, goal));
@@ -110,7 +120,9 @@ public class ExampleCommand implements CommandClass {
   }
 
   @Command(names = "break")
-  public boolean breakConnect(@Sender CommandSender sender, Block start, Block goal) {
+  public boolean breakConnect(@Sender CommandSender sender,
+                              @Named("start-block") Block start,
+                              @Named("goal-block") Block goal) {
     if (!(sender instanceof Player)) {
       sender.sendMessage("Only players!");
       return false;
@@ -119,12 +131,15 @@ public class ExampleCommand implements CommandClass {
       sender.sendMessage("Start or goal is not liquid!");
       return false;
     }
-    TaskState state = runPathfinding(
+    LiquidConnection connection = runPathfinding(
         sender,
         null,
         start,
-        goal).getState();
-    if (state != TaskState.SUCCESSFULLY) {
+        goal);
+    if (connection == null) {
+      return false;
+    }
+    if (connection.getState() != TaskState.SUCCESSFULLY) {
       return true;
     }
     if (goal.isLiquid()) {
@@ -141,8 +156,15 @@ public class ExampleCommand implements CommandClass {
     // Factor multiplier.
     // Apply to distance to make the region radius a bit more extended.
     double factor = 1.8;
-    return (int) (start.getLocation()
-        .distance(goal.getLocation()) * factor);
+    return (int) (
+        manhattanBlockDistance3D(start, goal) * factor);
+  }
+
+  static int manhattanBlockDistance3D(Block node1, Block node2) {
+    int x = Math.abs(node1.getX() - node2.getX());
+    int y = Math.abs(node1.getY() - node2.getY());
+    int z = Math.abs(node1.getZ() - node2.getZ());
+    return x + y + z;
   }
 
   public String serialize(TextComponent component) {
